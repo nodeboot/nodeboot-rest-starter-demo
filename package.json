@@ -1,0 +1,17 @@
+{
+  "name": "nodeboot-rest-starter-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/main/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jrichardsz",
+  "license": "MIT",
+  "dependencies": {
+    "nodeboot-rest-starter": "github:nodeboot/nodeboot-rest-starter#1.0.0-alpha",
+    "nodeboot-database-starter": "github:nodeboot/nodeboot-database-starter#1.0.0-alpha",
+    "nodejs-require-enhancer": "github:jrichardsz/nodejs-require-enhancer"
+  }
+}
