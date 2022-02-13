@@ -4,14 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/main/index.js",
+    "start": "nodemon src/main/index.js --ignore 'meta.json'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "jrichardsz",
   "license": "MIT",
   "dependencies": {
-    "nodeboot-rest-starter": "github:nodeboot/nodeboot-rest-starter#1.0.0-alpha",
-    "nodeboot-database-starter": "github:nodeboot/nodeboot-database-starter#1.0.0-alpha",
-    "nodejs-require-enhancer": "github:jrichardsz/nodejs-require-enhancer"
+    "express-session": "^1.17.2",
+    "nodeboot-database-starter": "file:../nodeboot-database-starter",
+    "nodeboot-rest-starter": "file:../nodeboot-rest-starter",
+    "nodemon": "^2.0.15"
   }
 }

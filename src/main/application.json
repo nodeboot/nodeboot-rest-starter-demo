@@ -6,7 +6,15 @@
         "host": "127.0.0.1",
         "user": "root",
         "password": "secret",
-        "database": "world"
+        "database": "nodeboot"
+      }
+    },
+    "session": {
+      "resave": true,
+      "saveUninitialized": true,
+      "cookie": {
+        "secure": false,
+        "maxAge": 36001000
       }
     }
   }
