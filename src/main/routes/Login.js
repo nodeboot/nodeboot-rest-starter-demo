@@ -12,7 +12,7 @@ function Route1(){
 
   this.cacheLoginHtml;
 
-  @Get(path="/login")
+  @Get(path="/login1")
   this.showLogin = (req, res) => {
     res.type('text/html');
 
@@ -27,6 +27,11 @@ function Route1(){
       }
       return res.send(data);
     })
+  }
+
+  @Get(path="/login")
+  this.showLogin = (req, res) => {
+    res.render('Login', { layout: 'Login' });
   }
 
   @Post(path="/login-action")
