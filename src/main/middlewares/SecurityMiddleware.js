@@ -1,4 +1,4 @@
-@Middleware(order="1")
+@Middleware
 function SecurityMiddleware(){
 
   this.dispatch = (req, res, next) => {

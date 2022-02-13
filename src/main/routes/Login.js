@@ -13,7 +13,13 @@ function Login(){
 
   @Get(path="/login")
   this.showLogin = (req, res) => {
-    res.render('login.html');
+    var uiVariables = {};
+    for(key in req.session){
+      if(key.startsWith("ui_")){
+        uiVariables[key] = escape(req.session[key])
+      }
+    }
+    res.render('login.html', uiVariables);
   }
 
   @Post(path="/login-action")
@@ -24,9 +30,8 @@ function Login(){
 
     if (typeof safeReceivedUsername === 'undefined' || typeof safeReceivedPassword === 'undefined') {
       console.log("username and password are required");
-      req.session['login_message'] = "User or password incorrect";
-      res.locals.login_message = "User or password incorrect";
-      return res.render('login.html',{login_message:"User or password incorrect"});
+      req.session['ui_login_message'] = "User or password incorrect";
+      return res.redirect("/login");
     }
     var user = await this.securityService.findUserByName(safeReceivedUsername);
     if(user[0].password === safeReceivedPassword){
@@ -34,9 +39,7 @@ function Login(){
       res.redirect("/home");
     }else{
       console.log("password incorrect for user: "+safeReceivedUsername);
-      req.session['login_message'] = "User or password incorrect";
-      res.locals.login_message = "User or password incorrect";
-      return res.render('login.html',{login_message:"User or password incorrect"});
+      req.session['ui_login_message'] = "User or password incorrect";
       return res.redirect("/login");
     }
 
