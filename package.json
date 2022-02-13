@@ -10,6 +10,7 @@
   "author": "jrichardsz",
   "license": "MIT",
   "dependencies": {
+    "escape-html": "^1.0.3",
     "express-session": "^1.17.2",
     "nodeboot-database-starter": "file:../nodeboot-database-starter",
     "nodeboot-rest-starter": "file:../nodeboot-rest-starter",

@@ -152,6 +152,9 @@
             <p class="title">Labelify</p>
             <div class="separator"></div>
             <p class="welcome-message">Please, provide login credential to proceed and have access to all our services</p>
+            <% if( typeof(login_message) !=="undefined"){ %>
+              <p class="welcome-message" style="background-color: bisque;"><%= login_message %></p>
+            <% } %>
 
             <form class="login-form" action="/login-action" method="POST">
                 <div class="form-control">

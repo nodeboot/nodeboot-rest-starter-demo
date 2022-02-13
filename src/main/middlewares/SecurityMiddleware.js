@@ -2,7 +2,6 @@
 function SecurityMiddleware(){
 
   this.dispatch = (req, res, next) => {
-    console.log("Hello from SecurityMiddleware");
 
     if(req.url.startsWith("/login")){
       return next();

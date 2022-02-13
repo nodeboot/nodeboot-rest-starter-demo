@@ -1,11 +1,11 @@
-@Route(name="Images")
-function Route1(){
+@Route(name="ImagesRoute")
+function ImagesRoute(){
 
   @Autowire(name="dbSession")
   this.dbSession;
 
   @Get(path="/image/next")
-  this.findAllCountries = (req, res) => {
+  this.getNextIMages = (req, res) => {
     res.json({
       code:200,
       message:"success",
@@ -16,4 +16,4 @@ function Route1(){
   }
 }
 
-module.exports = Route1;
+module.exports = ImagesRoute;

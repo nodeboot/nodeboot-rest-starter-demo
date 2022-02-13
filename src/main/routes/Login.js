@@ -1,51 +1,46 @@
 const fs = require("fs")
 const path = require("path")
+const escape = require('escape-html');
 
 @Route(name="Login")
-function Route1(){
+function Login(){
 
-  @Autowire(name="dbSession")
-  this.dbSession;
+  @Autowire(name="securityService")
+  this.securityService;
 
   @Autowire(name="rootPath")
   this.rootPath;
 
-  this.cacheLoginHtml;
-
-  @Get(path="/login1")
-  this.showLogin = (req, res) => {
-    res.type('text/html');
-
-    if(this.cacheLoginHtml){
-      return res.send(this.cacheLoginHtml);
-    }
-
-    fs.readFile(path.join(this.rootPath,"src/main/pages/login.html"), 'utf8' , (err, data) => {
-      if (err) {
-        console.error(err)
-        return res.send("Internal Error");
-      }
-      return res.send(data);
-    })
-  }
-
   @Get(path="/login")
   this.showLogin = (req, res) => {
-    res.render('Login', { layout: 'Login' });
+    res.render('login.html');
   }
 
   @Post(path="/login-action")
-  this.processLogin = (req, res) => {
-    console.log(req.body);
-    if (typeof req.body.username === 'undefined' || typeof req.body.password === 'undefined') {
-      console.log("User or password incorrect: "+req.body.username);
+  this.processLogin = async (req, res) => {
+
+    var safeReceivedUsername = escape(req.body.username)
+    var safeReceivedPassword = escape(req.body.password)
+
+    if (typeof safeReceivedUsername === 'undefined' || typeof safeReceivedPassword === 'undefined') {
+      console.log("username and password are required");
       req.session['login_message'] = "User or password incorrect";
+      res.locals.login_message = "User or password incorrect";
+      return res.render('login.html',{login_message:"User or password incorrect"});
+    }
+    var user = await this.securityService.findUserByName(safeReceivedUsername);
+    if(user[0].password === safeReceivedPassword){
+      req.session['user_details'] = {};
+      res.redirect("/home");
+    }else{
+      console.log("password incorrect for user: "+safeReceivedUsername);
+      req.session['login_message'] = "User or password incorrect";
+      res.locals.login_message = "User or password incorrect";
+      return res.render('login.html',{login_message:"User or password incorrect"});
       return res.redirect("/login");
     }
 
-    req.session['user_details'] = {};
-    res.redirect("/home");
   }
 }
 
-module.exports = Route1;
+module.exports = Login;
