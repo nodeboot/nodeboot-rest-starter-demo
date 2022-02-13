@@ -1,19 +1,22 @@
 @ServerInitializer()
-function ServerListener(){
+
+function ServerListener() {
+
+  @Autowire(name = "dbSession")
+  this.dbSession;
 
   this.onBeforeLoad = () => {
-    return new Promise(function(resolve, reject) {
-      console.log("Hello im before express");
-      resolve();
+    return new Promise(async (resolve, reject) => {
+      console.log("Configuring database...");
+      await this.dbSession.schema.createTableIfNotExists('persons', function(table) {
+        table.increments('id').primary();
+        table.string('name').notNullable();
+        resolve();
+      });
+
     });
   }
 
-  this.onAfterLoad = () => {
-    return new Promise(function(resolve, reject) {
-      console.log("Hello im after express");
-      resolve();
-    });
-  }
 }
 
 module.exports = ServerListener;
