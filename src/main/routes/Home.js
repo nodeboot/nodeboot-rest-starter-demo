@@ -12,7 +12,7 @@ function Route1(){
 
   @Get(path="/home")
   this.showHome = (req, res) => {
-    res.render('index.html');
+    res.render('home.html');
   }
 }
 

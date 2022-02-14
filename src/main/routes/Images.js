@@ -4,8 +4,9 @@ function ImagesRoute(){
   @Autowire(name="dbSession")
   this.dbSession;
 
-  @Get(path="/image/next")
-  this.getNextIMages = (req, res) => {
+  @Get(path="/api/image/next")
+  @Protected(permission="image:get-next")
+  this.getNextImage = (req, res) => {
     res.json({
       code:200,
       message:"success",

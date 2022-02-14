@@ -82,7 +82,7 @@
       document.getElementById("button_clear").onclick = clear;
       document.getElementById("button_submit").onclick = submit;
 
-      fetch("/image/next")
+      fetch("/api/image/next")
         .then(function(response) {
             return response.json();
         })
@@ -191,7 +191,7 @@
       })
       console.log(reCalculatedCoordinates);
 
-      console.log(rect);
+      // console.log(rect);
     };
 
     function generateSquareFromTwoPints(p1, p2) {

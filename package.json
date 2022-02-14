@@ -12,6 +12,7 @@
   "dependencies": {
     "escape-html": "^1.0.3",
     "express-session": "^1.17.2",
+    "jsonwebtoken": "^8.5.1",
     "nodeboot-database-starter": "file:../nodeboot-database-starter",
     "nodeboot-rest-starter": "file:../nodeboot-rest-starter",
     "nodemon": "^2.0.15"
