@@ -205,8 +205,8 @@
         .then(function(jsonResponse) {
           console.log(jsonResponse);
           if(jsonResponse.code == 200 && typeof jsonResponse.content.access_token !== 'undefined'){
-            window.location.href = '/home';
-            window.localStorage.setItem("access_token", jsonResponse.access_token);
+            window.location.href = '/home?uuid='+encodeURI(request.uuid);
+            window.localStorage.setItem("access_token", jsonResponse.content.access_token);
           }else{
             document.getElementById("ui_login_message").innerHTML = jsonResponse.message;
           }

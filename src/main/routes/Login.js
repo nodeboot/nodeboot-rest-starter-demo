@@ -122,7 +122,6 @@ function Login() {
             access_token: generateJwtToken(payload, process.env.TOKEN_SECRET, "3600s")
           }
         };
-        console.log(response);
         return res.json(response);
       } else {
         let response = {
