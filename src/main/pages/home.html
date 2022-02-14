@@ -73,8 +73,13 @@
     var xAxisCoodinate;
     var yAxisCoodinate;
     var currentImagen;
+    var uuid;
 
     window.onload = function() {
+
+      let params = (new URL(document.location)).searchParams;
+      uuid = params.get("uuid");
+      console.log(uuid);
 
       canvas = document.getElementById('canvas');
       canvasContext = canvas.getContext('2d');
@@ -82,17 +87,30 @@
       document.getElementById("button_clear").onclick = clear;
       document.getElementById("button_submit").onclick = submit;
 
-      fetch("/api/image/next")
+      var request = {
+        uuid: uuid
+      }
+
+      fetch("/api/image/next", {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(request)
+        })
         .then(function(response) {
-            return response.json();
+          return response.json();
         })
         .then(function(jsonResponse) {
-          alert(JSON.stringify(jsonResponse))
+          if(jsonResponse.code!=200){
+            return appendText("metadata", `${jsonResponse.message}`)
+          }
           drawImage(jsonResponse.content.url);
         });
     }
 
-    function drawImage(imageUrl){
+    function drawImage(imageUrl) {
       var header = document.getElementById('config_section').getBoundingClientRect();
       appendText("metadata", `screen: (${window.innerWidth}, ${window.innerHeight})`)
 
@@ -112,7 +130,7 @@
       currentImagen.src = imageUrl;
     }
 
-    function redrawImage(){
+    function redrawImage() {
       canvasContext.drawImage(currentImagen, xAxisCoodinate, 0, fixedImageDimension.width, fixedImageDimension.height);
     }
 
@@ -162,25 +180,43 @@
       // squarePoints.sort(function(a, b) {
       //   return a.x - b.x;
       // })
-      var x1 = rect.startX-xAxisCoodinate;
+
+      if(Object.keys(rect).length==0){
+        alert("Please select a square")
+        return;
+      }
+
+      var x1 = rect.startX - xAxisCoodinate;
       var y1 = rect.startY;
 
-      var x2 = rect.startX-xAxisCoodinate+rect.w;
+      var x2 = rect.startX - xAxisCoodinate + rect.w;
       var y2 = rect.startY;
 
-      var x3 = rect.startX-xAxisCoodinate+rect.w;
-      var y3 = rect.startY+rect.h;
+      var x3 = rect.startX - xAxisCoodinate + rect.w;
+      var y3 = rect.startY + rect.h;
 
-      var x4 = rect.startX-xAxisCoodinate;
-      var y4 = rect.startY+rect.h;
+      var x4 = rect.startX - xAxisCoodinate;
+      var y4 = rect.startY + rect.h;
 
       var coordinates = [];
-      coordinates.push({"x":x1, "y":y1});
-      coordinates.push({"x":x2, "y":y2});
-      coordinates.push({"x":x3, "y":y3});
-      coordinates.push({"x":x4, "y":y4});
+      coordinates.push({
+        "x": x1,
+        "y": y1
+      });
+      coordinates.push({
+        "x": x2,
+        "y": y2
+      });
+      coordinates.push({
+        "x": x3,
+        "y": y3
+      });
+      coordinates.push({
+        "x": x4,
+        "y": y4
+      });
 
-      console.log(coordinates);
+      // console.log(coordinates);
       var reCalculatedCoordinates = clone(coordinates);
       for (coordinate of reCalculatedCoordinates) {
         coordinate.x = Math.round(coordinate.x / ratio);
@@ -189,9 +225,10 @@
       reCalculatedCoordinates.sort(function(a, b) {
         return a.x - b.x;
       })
-      console.log(reCalculatedCoordinates);
+      alert(JSON.stringify(reCalculatedCoordinates, null, 4))
 
-      // console.log(rect);
+      //TODO: send human annotation
+      //and load next image
     };
 
     function generateSquareFromTwoPints(p1, p2) {
@@ -312,10 +349,11 @@
     }
 
     /* https://stackoverflow.com/questions/53318646/change-colour-of-each-rectangle-in-canvas
-    */
+     */
     function draw() {
       canvasContext.setLineDash([6]);
       canvasContext.beginPath();
+      canvasContext.strokeStyle = "#24fc03";
       canvasContext.fillStyle = "#FF0000";
       canvasContext.rect(rect.startX, rect.startY, rect.w, rect.h);
       canvasContext.lineWidth = 5;
@@ -330,7 +368,7 @@
     <br>
     <label id="metadata"></label>
     <br>
-    <button id="button_load" class="button">load image</button>
+    <!-- <button id="button_load" class="button">load image</button> -->
     <button id="button_clear" class="button">clear</button>
     <button id="button_submit" class="button">submit</button>
     <br>

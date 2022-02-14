@@ -1,5 +1,5 @@
 @Service
-function SecurityService() {
+function SecurityDataSource() {
 
   @Autowire(name = "dbSession")
   this.dbSession;
@@ -21,4 +21,4 @@ function SecurityService() {
 
 }
 
-module.exports = SecurityService;
+module.exports = SecurityDataSource;

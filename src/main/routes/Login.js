@@ -7,11 +7,11 @@ const jwt = require('jsonwebtoken')
 
 function Login() {
 
-  @Autowire(name = "securityService")
-  this.securityService;
+  @Autowire(name = "securityDataSource")
+  this.securityDataSource;
 
-  @Autowire(name = "userJobsService")
-  this.userJobsService;
+  @Autowire(name = "userJobsDataSource")
+  this.userJobsDataSource;
 
   @Autowire(name = "rootPath")
   this.rootPath;
@@ -95,9 +95,9 @@ function Login() {
     var safeReceivedPassword = escape(req.body.password)
     var safeReceivedUuid = escape(req.body.uuid)
 
-    var user = await this.securityService.findUserByName(safeReceivedUsername);
+    var user = await this.securityDataSource.findUserByName(safeReceivedUsername);
     if (user[0].password === safeReceivedPassword) {
-      var userJob = await this.userJobsService.findUserJob(user[0].id);
+      var userJob = await this.userJobsDataSource.findUserJob(user[0].id);
 
       if (userJob.length == 0) {
         let response = {

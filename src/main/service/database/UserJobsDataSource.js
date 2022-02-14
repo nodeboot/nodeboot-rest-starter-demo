@@ -1,5 +1,5 @@
 @Service
-function UserJobsService() {
+function UserJobsDataSource() {
 
   @Autowire(name = "dbSession")
   this.dbSession;
@@ -21,4 +21,4 @@ function UserJobsService() {
 
 }
 
-module.exports = UserJobsService;
+module.exports = UserJobsDataSource;

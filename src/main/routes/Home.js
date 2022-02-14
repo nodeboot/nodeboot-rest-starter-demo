@@ -10,6 +10,11 @@ function Route1(){
   @Autowire(name="rootPath")
   this.rootPath;
 
+  @Get(path="/")
+  this.showRoot = (req, res) => {
+    res.redirect('/home');
+  }
+
   @Get(path="/home")
   this.showHome = (req, res) => {
     res.render('home.html');
