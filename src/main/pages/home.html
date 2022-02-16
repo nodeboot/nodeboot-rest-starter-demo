@@ -74,6 +74,7 @@
     var yAxisCoodinate;
     var currentImagen;
     var uuid;
+    var imageId;
 
     window.onload = function() {
 
@@ -87,6 +88,13 @@
       document.getElementById("button_clear").onclick = clear;
       document.getElementById("button_submit").onclick = submit;
 
+      loadImage();
+    }
+
+    function loadImage() {
+
+      clearText("metadata");
+
       var request = {
         uuid: uuid
       }
@@ -95,17 +103,19 @@
           method: 'POST',
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'authorization': 'Bearer '+window.localStorage.getItem("access_token")
           },
           body: JSON.stringify(request)
         })
-        .then(function(response) {
+        .then((response)=> {
           return response.json();
         })
-        .then(function(jsonResponse) {
+        .then((jsonResponse)=> {
           if(jsonResponse.code!=200){
             return appendText("metadata", `${jsonResponse.message}`)
           }
+          imageId = jsonResponse.content.id;
           drawImage(jsonResponse.content.url);
         });
     }
@@ -225,10 +235,40 @@
       reCalculatedCoordinates.sort(function(a, b) {
         return a.x - b.x;
       })
-      alert(JSON.stringify(reCalculatedCoordinates, null, 4))
+      // alert(JSON.stringify(reCalculatedCoordinates, null, 4))
 
-      //TODO: send human annotation
-      //and load next image
+      var request = {
+        annotationGroupIdentifier: uuid,
+        imageId: imageId,
+        x1: reCalculatedCoordinates[0].x,
+        y1: reCalculatedCoordinates[0].y,
+        x2: reCalculatedCoordinates[1].x,
+        y2: reCalculatedCoordinates[1].y,
+        x3: reCalculatedCoordinates[2].x,
+        y3: reCalculatedCoordinates[2].y,
+        x4: reCalculatedCoordinates[3].x,
+        y4: reCalculatedCoordinates[3].y
+      }
+
+      fetch("/api/annotation", {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'authorization': 'Bearer '+window.localStorage.getItem("access_token")
+          },
+          body: JSON.stringify(request)
+        })
+        .then(function(response) {
+          return response.json();
+        })
+        .then(function(jsonResponse) {
+          if(jsonResponse.code!=200){
+            return appendText("metadata", `${jsonResponse.message}`)
+          }
+          loadImage();
+        });
+
     };
 
     function generateSquareFromTwoPints(p1, p2) {
@@ -269,6 +309,10 @@
       }) => {
         return ele
       })
+    }
+
+    function clearText(id) {
+      document.getElementById(id).innerHTML = " ";
     }
 
     function appendText(id, value) {

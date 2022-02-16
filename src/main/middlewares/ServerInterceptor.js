@@ -26,9 +26,9 @@ function ServerInterceptor() {
           table.string('url', 150).notNullable();
           table.string('file_name', 50).notNullable();
           table.string('expected_classes', 50);
-        }).createTable('user_jobs', function(table) {
+        }).createTable('user_annotation_group', function(table) {
           table.integer('user_id').notNullable();
-          table.string('image_group_identifier', 50);
+          table.string('annotation_group_identifier', 50);
         }).createTable('human_annotation', function(table) {
           table.integer('user_id').notNullable();
           table.integer('image_id').notNullable();

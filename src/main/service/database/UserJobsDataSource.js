@@ -9,7 +9,7 @@ function UserJobsDataSource() {
       try {
         var userJob = await this.dbSession
           .select('*')
-          .from('user_jobs')
+          .from('user_annotation_group')
           .where('user_id', userId);
         resolve(userJob);
       }catch(err){

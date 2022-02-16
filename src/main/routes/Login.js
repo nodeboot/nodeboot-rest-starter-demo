@@ -58,7 +58,7 @@ function Login() {
         return res.redirect("/login");
       }
 
-      if (userJob[0].image_group_identifier === safeReceivedUuid) {
+      if (userJob[0].annotation_group_identifier === safeReceivedUuid) {
         req.session['user_details'] = {
           role: user[0].role
         };
@@ -108,7 +108,7 @@ function Login() {
         return res.json(response);
       }
 
-      if (userJob[0].image_group_identifier === safeReceivedUuid) {
+      if (userJob[0].annotation_group_identifier === safeReceivedUuid) {
         req.session['user_details'] = {
           role: user[0].role
         };

@@ -6,22 +6,28 @@ function ImageDataSource() {
   this.dbSession;
 
   this.findNextImageSqlString = `
-  select * from image im
-  where group_identifier = :group_identifier
-  and im.id not in (
-  	select ha.image_id from human_annotation ha, user us
-  	where us.username  = :username
-  	and ha.user_id = us.id
-  )
+  select im.id , im.url  from annotation a, user us, image im
+  where a.annotation_group_identifier  = :annotation_group_identifier
+  and us.username = :username
+  and us.id = a.user_id
+  and a.image_id = im.id
+  and (a.x1 is null
+  or a.y1 is null
+  or a.x2 is null
+  or a.y2 is null
+  or a.x1 is null
+  or a.y2 is null
+  or a.x1 is null
+  or a.y2 is null)
   LIMIT 1
   `
 
-  this.findNextImage = (group_identifier, username) => {
+  this.findNextImage = (annotation_group_identifier, username) => {
     return new Promise(async (resolve, reject) => {
       try {
 
         var params = {
-          group_identifier: group_identifier,
+          annotation_group_identifier: annotation_group_identifier,
           username: username
         };
 
@@ -29,10 +35,10 @@ function ImageDataSource() {
           .raw(this.findNextImageSqlString, params);
 
         if (nextImage.length == 0) {
-          reject("Failed to find next image");
+          resolve([]);
         }
 
-        resolve(nextImage[0][0]);
+        resolve(nextImage[0]);
       } catch (err) {
         console.log(err);
         reject("Failed to find next image");
