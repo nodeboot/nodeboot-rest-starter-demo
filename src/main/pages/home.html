@@ -94,6 +94,7 @@
     function loadImage() {
 
       clearText("metadata");
+      canvasContext.clearRect(0, 0, canvas.width, canvas.height); //clear canvas
 
       var request = {
         uuid: uuid
@@ -112,11 +113,18 @@
           return response.json();
         })
         .then((jsonResponse)=> {
-          if(jsonResponse.code!=200){
+          if(jsonResponse.code==200){
+            imageId = jsonResponse.content.id;
+            return drawImage(jsonResponse.content.url);
+          }
+
+          if(jsonResponse.code==501){
+            document.getElementById("button_clear").style.display = 'none';
+            document.getElementById("button_submit").style.display = 'none';
             return appendText("metadata", `${jsonResponse.message}`)
           }
-          imageId = jsonResponse.content.id;
-          drawImage(jsonResponse.content.url);
+
+          return appendText("metadata", `${jsonResponse.message}`)
         });
     }
 
@@ -284,8 +292,6 @@
     }
 
     function getIntersection(a, b, c, d) {
-      console.log(pendiente);
-      console.log(constante);
       var mp0p1 = pendiente(a, b);
       var bp0p1 = constante(b.x, b.y, mp0p1);
 

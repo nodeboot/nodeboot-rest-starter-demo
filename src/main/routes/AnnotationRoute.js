@@ -9,7 +9,6 @@ function AnnotationRoute() {
   @Autowire(name = "annotationDataSource")
   this.annotationDataSource;
 
-  //TODO
   @Post(path = "/api/annotation")
   @Protected(permission = "annotation:create")
   this.createAnnotation = async (req, res) => {
@@ -33,8 +32,16 @@ function AnnotationRoute() {
       });
     }
 
-    //TODO: get userId from username (payload.subject_id)
-    var userId = 1;
+    var user;
+    try{
+      user = await this.securityDataSource.findUserByName(payload.subject_id);
+    }catch(err){
+      return res.json({
+        code: 401,
+        message: "You are not allowed"
+      });
+    }
+    var userId = user[0].id;
     var safeReceivedImageId = req.body.imageId;
     var safeReceivedAnnotationGroupIdentifier = req.body.annotationGroupIdentifier;
     var safeReceivedX1 = req.body.x1;
