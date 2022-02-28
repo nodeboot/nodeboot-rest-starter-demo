@@ -1,0 +1,1 @@
+[{"variables":{},"functions":{"getHealth":[{"name":"Get","arguments":{"path":"/health"}}]},"meta":{"name":"Route","arguments":{},"location":"/HealthRoute.js"}}]
